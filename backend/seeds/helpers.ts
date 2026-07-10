@@ -92,3 +92,41 @@ export function addFavorite(userId: string, productId: string): void {
     )
     .run(randomUUID(), userId, productId);
 }
+
+export interface OrderLineInput {
+  productId: string;
+  qty: number;
+  price: number;
+}
+
+export interface AddOrderOptions {
+  status?: string;
+  createdAt?: string;
+}
+
+// Insert one order (total = sum of qty*price) and its order_items rows.
+export function addOrder(
+  userId: string,
+  lines: OrderLineInput[],
+  opts: AddOrderOptions = {}
+): string {
+  ensureSchema();
+  const orderId = randomUUID();
+  const total = lines.reduce((sum, line) => sum + line.qty * line.price, 0);
+  const createdAt = opts.createdAt ?? new Date().toISOString();
+  const status = opts.status ?? "confirmed";
+
+  sqlite
+    .prepare(
+      "INSERT INTO orders (id, user_id, total, status, created_at) VALUES (?, ?, ?, ?, ?)"
+    )
+    .run(orderId, userId, total, status, createdAt);
+
+  const insertItem = sqlite.prepare(
+    "INSERT INTO order_items (id, order_id, product_id, qty, price) VALUES (?, ?, ?, ?, ?)"
+  );
+  for (const line of lines) {
+    insertItem.run(randomUUID(), orderId, line.productId, line.qty, line.price);
+  }
+  return orderId;
+}
