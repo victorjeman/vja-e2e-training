@@ -29,11 +29,19 @@ its seed in `beforeEach`, so tests are deterministic and independent.
 | `tests/cart/remove-from-cart.spec.ts` | `user-cart-has-items` | remove-cart-item-btn |
 | `tests/cart/checkout.spec.ts` | `user-cart-has-items` | checkout-btn, order-success-message |
 | `tests/cart/empty-checkout.spec.ts` | `user-empty-cart` | checkout-btn (→ error) |
+| `tests/products/brand-filter.spec.ts` | `catalog-default` | brand-filter, brand-option (+data-brand) |
+| `tests/products/color-filter.spec.ts` | `catalog-default` | color-filter, color-option (+data-color) |
+| `tests/products/rating-filter.spec.ts` | `catalog-default` | rating-filter, rating-option (+data-rating) |
+| `tests/products/in-stock-filter.spec.ts` | `catalog-default` | in-stock-filter |
+| `tests/products/sort.spec.ts` | `catalog-default` | sort-select, results-count |
+| `tests/products/pagination.spec.ts` | `catalog-default` | pagination, pagination-prev, pagination-next, pagination-page (+data-page), page-info |
+| `tests/favorites/favorites.spec.ts` | `user-no-favorites` (empty + toggle), `user-has-favorites` (viewing) | favorites-link, favorites-page, favorites-list, favorites-empty, favorite-btn (+data-active) |
 
 ## Seeds (CONTRACT §6) — what each guarantees
 
 Every seed first resets the tables it owns, then `ensureCatalog()`
-(4 categories + 24 products, idempotent), then sets exactly its state.
+(4 categories + 500 products, incl. the 24 fixed curated ones, idempotent),
+then sets exactly its state.
 
 | seed | guarantees |
 |---|---|
@@ -60,8 +68,12 @@ Exported from `backend/seeds/e2e-fixtures.ts` — rely on these exact values.
   `Laptop`) — searching `Laptop` matches "Gaming Laptop".
 - **Search no-match** (`SEARCH_NO_MATCH_TERM` = `zzzznomatch`) — yields zero results.
 
-Product catalog (source of truth): `backend/seeds/catalog.ts` — 24 products,
-ids like `p-elec-1`, `p-cloth-3`, `p-book-5`, `p-home-2`; prices ~11..1199.
+Product catalog (source of truth): `backend/seeds/catalog.ts` — 500 products
+across 4 categories (Electronics / Clothing / Books / Home & Kitchen). The 24
+**curated** products keep fixed ids and attributes (e.g. `p-elec-1` "Gaming Laptop"
+brand Dell, Black, rating 4.7; `p-book-1` "Mystery Novel"; `p-home-2` "Chef's Knife");
+generated products use ids `p-gen-0001`... . Prices span roughly $6..$2497, 16 brands,
+8 colors, ~11% out of stock, some discounted. Seeds reference only the curated ids.
 
 ## How to add a new test + seed pair
 
