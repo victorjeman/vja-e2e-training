@@ -24,6 +24,13 @@ export const products = sqliteTable("products", {
   image: text("image").notNull(),
   imageUrl: text("image_url").notNull(),
   description: text("description").notNull(),
+  // Rich attributes for multi-attribute filtering (all NOT NULL).
+  brand: text("brand").notNull(),
+  rating: real("rating").notNull(),
+  reviewCount: integer("review_count").notNull(),
+  color: text("color").notNull(),
+  inStock: integer("in_stock").notNull(),
+  discountPercent: integer("discount_percent").notNull(),
 });
 
 export const favorites = sqliteTable(

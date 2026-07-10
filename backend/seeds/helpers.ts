@@ -2,7 +2,7 @@ import { randomUUID, scryptSync, randomBytes, timingSafeEqual } from "node:crypt
 import { sqlite, db } from "../db/client";
 import { createAllTables } from "../db/ddl";
 import { categories, products } from "../db/schema";
-import { CATEGORIES, PRODUCTS } from "./catalog";
+import { CATEGORIES, ALL_PRODUCTS } from "./catalog";
 
 // Tables that hold per-user/session state (safe to wipe between seeds).
 // Catalog tables (categories/products) are preserved and re-ensured.
@@ -45,12 +45,10 @@ export function ensureCatalog(): void {
   for (const c of CATEGORIES) {
     db.insert(categories).values(c).onConflictDoNothing().run();
   }
-  for (const p of PRODUCTS) {
-    // Real product photo saved locally under public/products/<id>.jpg.
-    db.insert(products)
-      .values({ ...p, imageUrl: `/products/${p.id}.jpg` })
-      .onConflictDoNothing()
-      .run();
+  for (const p of ALL_PRODUCTS) {
+    // Each product already carries its imageUrl (curated: /products/<id>.jpg,
+    // generated: local pool image), so values(p) inserts every column directly.
+    db.insert(products).values(p).onConflictDoNothing().run();
   }
 }
 

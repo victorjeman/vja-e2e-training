@@ -23,7 +23,13 @@ const CREATE_STATEMENTS = [
     category_id TEXT NOT NULL REFERENCES categories(id),
     image TEXT NOT NULL,
     image_url TEXT NOT NULL,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    brand TEXT NOT NULL,
+    rating REAL NOT NULL,
+    review_count INTEGER NOT NULL,
+    color TEXT NOT NULL,
+    in_stock INTEGER NOT NULL,
+    discount_percent INTEGER NOT NULL
   )`,
   `CREATE TABLE IF NOT EXISTS favorites (
     id TEXT PRIMARY KEY,
