@@ -7,6 +7,7 @@ import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { TESTIDS } from "@/shared/testids";
 import { ROUTES } from "@/shared/routes";
 import { AUTH_CONFIG } from "../auth-config";
@@ -55,9 +56,10 @@ export function AuthLoginForm() {
 
   return (
     <form data-testid={TESTIDS.loginForm} onSubmit={handleSubmit} className="space-y-4">
-      <Box className="space-y-1">
-        <Text className="font-medium text-gray-900">{CFG.emailLabel}</Text>
+      <Box className="space-y-1.5">
+        <Label htmlFor="login-email">{CFG.emailLabel}</Label>
         <Input
+          id="login-email"
           data-testid={TESTIDS.loginEmailInput}
           type="email"
           value={email}
@@ -66,9 +68,10 @@ export function AuthLoginForm() {
         />
       </Box>
 
-      <Box className="space-y-1">
-        <Text className="font-medium text-gray-900">{CFG.passwordLabel}</Text>
+      <Box className="space-y-1.5">
+        <Label htmlFor="login-password">{CFG.passwordLabel}</Label>
         <Input
+          id="login-password"
           data-testid={TESTIDS.loginPasswordInput}
           type="password"
           value={password}
@@ -78,12 +81,15 @@ export function AuthLoginForm() {
       </Box>
 
       {error ? (
-        <Text data-testid={TESTIDS.loginError} className="text-red-600">
+        <Text
+          data-testid={TESTIDS.loginError}
+          className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive"
+        >
           {error}
         </Text>
       ) : null}
 
-      <Button data-testid={TESTIDS.loginBtn} type="submit" disabled={submitting}>
+      <Button data-testid={TESTIDS.loginBtn} type="submit" disabled={submitting} className="w-full">
         {submitting ? CFG.submitting : CFG.submit}
       </Button>
     </form>

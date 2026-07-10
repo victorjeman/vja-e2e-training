@@ -33,8 +33,11 @@ export function ProductCategoryFilter({ categories, selected, onSelect }: Produc
         <Button
           key={option.id}
           data-testid={CATEGORY_TESTID[option.id]}
-          variant={selected === option.id ? "primary" : "secondary"}
+          size="sm"
+          variant={selected === option.id ? "primary" : "outline"}
+          data-active={selected === option.id ? "true" : "false"}
           onClick={() => onSelect(option.id)}
+          className="rounded-full"
         >
           {option.name}
         </Button>

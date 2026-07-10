@@ -1,12 +1,10 @@
 import type { HTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-  className?: string;
-}
-
-export function Container({ className = "", children, ...rest }: ContainerProps) {
+// Page-width container (not shadcn). Forwards className + arbitrary props.
+export function Container({ className, children, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={`mx-auto w-full max-w-5xl px-4 ${className}`} {...rest}>
+    <div className={cn("mx-auto w-full max-w-6xl px-4 sm:px-6", className)} {...rest}>
       {children}
     </div>
   );

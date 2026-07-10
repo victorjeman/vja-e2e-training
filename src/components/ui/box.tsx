@@ -1,12 +1,10 @@
 import type { HTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-interface BoxProps extends HTMLAttributes<HTMLDivElement> {
-  className?: string;
-}
-
-export function Box({ className = "", children, ...rest }: BoxProps) {
+// Neutral layout primitive (not shadcn). Forwards className + arbitrary props.
+export function Box({ className, children, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={className} {...rest}>
+    <div className={cn(className)} {...rest}>
       {children}
     </div>
   );

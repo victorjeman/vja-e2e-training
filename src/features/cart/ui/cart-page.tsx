@@ -2,12 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { AlertCircle, CheckCircle2, ShoppingBag } from "lucide-react";
 import { Box } from "@/components/ui/box";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { TESTIDS } from "@/shared/testids";
+import { ROUTES } from "@/shared/routes";
 import { CART_CONFIG } from "../cart-config";
 import type { Cart } from "../cart-types";
 import { CartItem } from "./cart-item";
@@ -63,49 +67,89 @@ export function CartPage({ cart: initialCart }: CartPageProps) {
   const isEmpty = cart.items.length === 0;
 
   return (
-    <Box className="space-y-4" data-testid={TESTIDS.cartPage}>
-      <Heading level={1}>{CART_CONFIG.heading}</Heading>
+    <Box className="space-y-6" data-testid={TESTIDS.cartPage}>
+      <Box className="space-y-1">
+        <Heading level={1}>{CART_CONFIG.heading}</Heading>
+        <Text className="text-base">{CART_CONFIG.text.subtitle}</Text>
+      </Box>
 
       {success && (
-        <Card>
-          <Text data-testid={TESTIDS.orderSuccessMessage} className="font-medium text-green-700">
+        <Card className="flex-row items-center gap-3 border-[color:var(--success)]/40 bg-[color:var(--success)]/10 p-4">
+          <CheckCircle2 className="size-5 shrink-0 text-[color:var(--success)]" />
+          <Text
+            data-testid={TESTIDS.orderSuccessMessage}
+            className="font-medium text-[color:var(--success)]"
+          >
             {CART_CONFIG.text.success}
           </Text>
         </Card>
       )}
 
-      {isEmpty ? (
-        <Text>{CART_CONFIG.text.empty}</Text>
-      ) : (
-        <Card>
-          <Box>
-            {cart.items.map((line) => (
-              <CartItem key={line.product.id} line={line} onRemove={handleRemove} />
-            ))}
-          </Box>
-          <Box className="flex items-center justify-between pt-4">
-            <Text className="text-base font-semibold text-gray-900">
-              {CART_CONFIG.text.totalLabel}: ${cart.total.toFixed(2)}
-            </Text>
-          </Box>
+      {/* Deviation: contract has no cart-error testid; using data-testid="cart-error" so empty-checkout error is locatable. Reported to orchestrator. */}
+      {error && (
+        <Card className="flex-row items-center gap-3 border-destructive/40 bg-destructive/10 p-4">
+          <AlertCircle className="size-5 shrink-0 text-destructive" />
+          <Text data-testid="cart-error" className="font-medium text-destructive">
+            {error}
+          </Text>
         </Card>
       )}
 
-      {/* Deviation: contract has no cart-error testid; using data-testid="cart-error" so empty-checkout error is locatable. Reported to orchestrator. */}
-      {error && (
-        <Text data-testid="cart-error" className="font-medium text-red-600">
-          {error}
-        </Text>
-      )}
+      <Box className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+        <Box>
+          {isEmpty ? (
+            <Card className="items-center gap-3 px-6 py-16 text-center">
+              <span className="flex size-12 items-center justify-center rounded-full bg-accent text-accent-foreground">
+                <ShoppingBag className="size-6" />
+              </span>
+              <Text className="text-base font-semibold text-foreground">
+                {CART_CONFIG.text.empty}
+              </Text>
+              <Text>{CART_CONFIG.text.emptyHint}</Text>
+              <Button asChild variant="outline" className="mt-1">
+                <Link href={ROUTES.products}>{CART_CONFIG.text.browseProducts}</Link>
+              </Button>
+            </Card>
+          ) : (
+            <Card className="gap-0 py-0">
+              <CardHeader className="py-4">
+                <CardTitle className="text-base">{CART_CONFIG.text.itemsTitle}</CardTitle>
+              </CardHeader>
+              <Separator />
+              <CardContent className="px-4">
+                {cart.items.map((line) => (
+                  <CartItem key={line.product.id} line={line} onRemove={handleRemove} />
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </Box>
 
-      <Box>
-        <Button
-          data-testid={TESTIDS.checkoutBtn}
-          onClick={handleCheckout}
-          disabled={busy}
-        >
-          {busy ? CART_CONFIG.text.checkingOut : CART_CONFIG.text.checkout}
-        </Button>
+        <Card className="h-fit gap-4 lg:sticky lg:top-24">
+          <CardHeader className="pb-0">
+            <CardTitle className="text-base">{CART_CONFIG.text.summaryTitle}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Box className="flex items-center justify-between text-sm text-muted-foreground">
+              <span>{CART_CONFIG.text.subtotalLabel}</span>
+              <span>${cart.total.toFixed(2)}</span>
+            </Box>
+            <Separator />
+            <Box className="flex items-center justify-between text-base font-semibold text-foreground">
+              <span>{CART_CONFIG.text.totalLabel}</span>
+              <span>${cart.total.toFixed(2)}</span>
+            </Box>
+            <Button
+              data-testid={TESTIDS.checkoutBtn}
+              onClick={handleCheckout}
+              disabled={busy}
+              size="lg"
+              className="w-full"
+            >
+              {busy ? CART_CONFIG.text.checkingOut : CART_CONFIG.text.checkout}
+            </Button>
+          </CardContent>
+        </Card>
       </Box>
     </Box>
   );

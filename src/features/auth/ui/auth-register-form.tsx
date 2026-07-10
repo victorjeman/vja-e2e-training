@@ -7,6 +7,7 @@ import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { TESTIDS } from "@/shared/testids";
 import { ROUTES } from "@/shared/routes";
 import { AUTH_CONFIG } from "../auth-config";
@@ -61,11 +62,10 @@ export function AuthRegisterForm() {
 
   return (
     <form data-testid={TESTIDS.registerForm} onSubmit={handleSubmit} className="space-y-4">
-      <Box className="space-y-1">
-        <Text className="font-medium text-gray-900">
-          {CFG.nameLabel}
-        </Text>
+      <Box className="space-y-1.5">
+        <Label htmlFor="register-name">{CFG.nameLabel}</Label>
         <Input
+          id="register-name"
           data-testid={TESTIDS.registerNameInput}
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -73,11 +73,10 @@ export function AuthRegisterForm() {
         />
       </Box>
 
-      <Box className="space-y-1">
-        <Text className="font-medium text-gray-900">
-          {CFG.emailLabel}
-        </Text>
+      <Box className="space-y-1.5">
+        <Label htmlFor="register-email">{CFG.emailLabel}</Label>
         <Input
+          id="register-email"
           data-testid={TESTIDS.registerEmailInput}
           type="email"
           value={email}
@@ -85,17 +84,16 @@ export function AuthRegisterForm() {
           autoComplete="email"
         />
         {emailError ? (
-          <Text data-testid={TESTIDS.emailError} className="text-red-600">
+          <Text data-testid={TESTIDS.emailError} className="text-sm font-medium text-destructive">
             {emailError}
           </Text>
         ) : null}
       </Box>
 
-      <Box className="space-y-1">
-        <Text className="font-medium text-gray-900">
-          {CFG.passwordLabel}
-        </Text>
+      <Box className="space-y-1.5">
+        <Label htmlFor="register-password">{CFG.passwordLabel}</Label>
         <Input
+          id="register-password"
           data-testid={TESTIDS.registerPasswordInput}
           type="password"
           value={password}
@@ -103,13 +101,13 @@ export function AuthRegisterForm() {
           autoComplete="new-password"
         />
         {passwordError ? (
-          <Text data-testid={TESTIDS.passwordError} className="text-red-600">
+          <Text data-testid={TESTIDS.passwordError} className="text-sm font-medium text-destructive">
             {passwordError}
           </Text>
         ) : null}
       </Box>
 
-      <Button data-testid={TESTIDS.registerBtn} type="submit" disabled={submitting}>
+      <Button data-testid={TESTIDS.registerBtn} type="submit" disabled={submitting} className="w-full">
         {submitting ? CFG.submitting : CFG.submit}
       </Button>
     </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TESTIDS } from "@/shared/testids";
 import { ROUTES } from "@/shared/routes";
@@ -18,9 +19,11 @@ export function AuthLogoutButton() {
   return (
     <Button
       data-testid={TESTIDS.logoutBtn}
-      variant="secondary"
+      variant="outline"
+      size="sm"
       onClick={handleLogout}
     >
+      <LogOut />
       {AUTH_CONFIG.logout.label}
     </Button>
   );

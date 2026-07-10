@@ -1,14 +1,21 @@
 import type { InputHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  className?: string;
-}
-
-export function Input({ className = "", ...rest }: InputProps) {
+// shadcn input. Forwards className + arbitrary props (incl. data-testid).
+export function Input({ className, type, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
-      className={`w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none ${className}`}
-      {...rest}
+      type={type}
+      data-slot="input"
+      className={cn(
+        "flex h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors outline-none",
+        "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground",
+        "file:border-0 file:bg-transparent file:text-sm file:font-medium",
+        "focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/40",
+        "disabled:cursor-not-allowed disabled:opacity-50",
+        className
+      )}
+      {...props}
     />
   );
 }
