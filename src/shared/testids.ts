@@ -31,6 +31,27 @@ export const TESTIDS = {
   searchInput: "search-input",
   clearFiltersBtn: "clear-filters-btn",
   noResultsMessage: "no-results-message",
+  // Advanced filters (added in the catalog expansion)
+  brandFilter: "brand-filter",
+  brandOption: "brand-option", // carries data-brand="<name>"
+  colorFilter: "color-filter",
+  colorOption: "color-option", // carries data-color="<name>"
+  ratingFilter: "rating-filter",
+  ratingOption: "rating-option", // carries data-rating="<min>"
+  inStockFilter: "in-stock-filter", // checkbox: only in-stock products
+  sortSelect: "sort-select",
+  resultsCount: "results-count", // text: number of products matching current filters
+  // Pagination
+  pagination: "pagination",
+  paginationPrev: "pagination-prev",
+  paginationNext: "pagination-next",
+  paginationPage: "pagination-page", // carries data-page="<n>"
+  pageInfo: "page-info",
+  // Favorites page
+  favoritesLink: "favorites-link",
+  favoritesPage: "favorites-page",
+  favoritesList: "favorites-list",
+  favoritesEmpty: "favorites-empty",
   // Cart
   cartLink: "cart-link",
   cartCount: "cart-count",
