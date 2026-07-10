@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../db/client";
 import { categories, products, type Category, type Product } from "../db/schema";
 
@@ -82,4 +83,10 @@ export function listBrands(): string[] {
 export function listColors(): string[] {
   const rows = db.select({ color: products.color }).from(products).all();
   return [...new Set(rows.map((r) => r.color))].sort((a, b) => a.localeCompare(b));
+}
+
+// True when a product with this id exists. Used by the cart/favorites routes to
+// answer 404 for a well-formed but unknown id instead of hitting a foreign-key 500.
+export function productExists(id: string): boolean {
+  return !!db.select({ id: products.id }).from(products).where(eq(products.id, id)).get();
 }
