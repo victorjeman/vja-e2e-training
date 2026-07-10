@@ -31,6 +31,7 @@ its seed in `beforeEach`, so tests are deterministic and independent.
 | `tests/cart/checkout.spec.ts` | `user-cart-has-items` | checkout-btn, order-success-message |
 | `tests/cart/empty-checkout.spec.ts` | `user-empty-cart` | checkout-btn (→ error) |
 | `tests/products/brand-filter.spec.ts` | `catalog-default` | brand-filter, brand-option (+data-brand) |
+| `tests/products/product-detail.spec.ts` | `catalog-default` | product-link, product-detail, product-detail-name, product-detail-price, product-detail-description, product-detail-back |
 | `tests/products/color-filter.spec.ts` | `catalog-default` | color-filter, color-option (+data-color) |
 | `tests/products/rating-filter.spec.ts` | `catalog-default` | rating-filter, rating-option (+data-rating) |
 | `tests/products/in-stock-filter.spec.ts` | `catalog-default` | in-stock-filter |

@@ -31,6 +31,13 @@ export const TESTIDS = {
   searchInput: "search-input",
   clearFiltersBtn: "clear-filters-btn",
   noResultsMessage: "no-results-message",
+  // Product detail
+  productLink: "product-link",
+  productDetail: "product-detail",
+  productDetailName: "product-detail-name",
+  productDetailPrice: "product-detail-price",
+  productDetailDescription: "product-detail-description",
+  productDetailBack: "product-detail-back",
   // Advanced filters (added in the catalog expansion)
   brandFilter: "brand-filter",
   brandOption: "brand-option", // carries data-brand="<name>"

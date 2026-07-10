@@ -85,6 +85,12 @@ export function listColors(): string[] {
   return [...new Set(rows.map((r) => r.color))].sort((a, b) => a.localeCompare(b));
 }
 
+// Single product by id, or undefined when no such product exists. Used by the
+// product detail page (/products/[id]). Kept sync like the other queries.
+export function getProductById(id: string): Product | undefined {
+  return db.select().from(products).where(eq(products.id, id)).get();
+}
+
 // True when a product with this id exists. Used by the cart/favorites routes to
 // answer 404 for a well-formed but unknown id instead of hitting a foreign-key 500.
 export function productExists(id: string): boolean {

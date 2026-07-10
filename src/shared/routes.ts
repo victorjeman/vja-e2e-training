@@ -9,6 +9,10 @@ export const ROUTES = {
   orders: "/orders",
 } as const;
 
+// Detail path for a single product. Kept as a separate helper so ROUTES stays a
+// flat `as const` string map.
+export const productDetailPath = (id: string) => `/products/${id}`;
+
 export const API = {
   authRegister: "/api/auth/register",
   authLogin: "/api/auth/login",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { Box } from "@/components/ui/box";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { productDetailPath } from "@/shared/routes";
 import { TESTIDS } from "@/shared/testids";
 import { PRODUCT_CONFIG } from "../product-config";
 import { productFormatPrice } from "../lib/product-format-price";
@@ -56,19 +58,29 @@ export function ProductCard({ product, category, isFavorite, onToggleFavorite }:
       className="group gap-0 overflow-hidden py-0 transition-all hover:-translate-y-1 hover:shadow-lg"
     >
       <Box className="relative aspect-square overflow-hidden bg-muted">
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          loading="lazy"
-          className={cn(
-            "size-full object-cover transition-transform duration-300 group-hover:scale-105",
-            outOfStock && "opacity-60 grayscale"
-          )}
-        />
-        {/* Emoji fallback kept subtle behind the photo. */}
-        <span className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center text-6xl opacity-40" aria-hidden>
-          {product.image}
-        </span>
+        {/* Only the image area navigates; the favorite button and badges below are
+            siblings of this Link, so clicking them never triggers navigation. */}
+        <Link
+          href={productDetailPath(product.id)}
+          data-testid={TESTIDS.productLink}
+          data-product-id={product.id}
+          aria-label={product.name}
+          className="absolute inset-0 block"
+        >
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            loading="lazy"
+            className={cn(
+              "size-full object-cover transition-transform duration-300 group-hover:scale-105",
+              outOfStock && "opacity-60 grayscale"
+            )}
+          />
+          {/* Emoji fallback kept subtle behind the photo. */}
+          <span className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center text-6xl opacity-40" aria-hidden>
+            {product.image}
+          </span>
+        </Link>
 
         {hasDiscount && (
           <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
@@ -109,7 +121,13 @@ export function ProductCard({ product, category, isFavorite, onToggleFavorite }:
             {product.brand}
           </span>
         </Box>
-        <h3 className="text-sm font-semibold leading-snug text-foreground">{product.name}</h3>
+        <h3 className="text-sm font-semibold leading-snug text-foreground">
+          {/* Name links to the same detail page; testid stays only on the image
+              link so each card carries exactly one product-link element. */}
+          <Link href={productDetailPath(product.id)} className="hover:underline">
+            {product.name}
+          </Link>
+        </h3>
         <ProductRatingStars rating={product.rating} reviewCount={product.reviewCount} />
         <Box className="flex items-baseline gap-2">
           <p className="text-xl font-bold tracking-tight text-foreground">

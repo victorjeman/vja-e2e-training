@@ -79,6 +79,17 @@ and carry a `data-*` attribute so you can target a specific one (for example
 | Clear all filters | `clear-filters-btn` |
 | No-results message | `no-results-message` |
 
+### Product detail
+
+| Feature | `data-testid` |
+|---|---|
+| Product link (per card; carries `data-product-id`) | `product-link` |
+| Product detail container | `product-detail` |
+| Product detail name | `product-detail-name` |
+| Product detail price | `product-detail-price` |
+| Product detail description | `product-detail-description` |
+| Back to products link | `product-detail-back` |
+
 ### Cart
 
 | Feature | `data-testid` |
