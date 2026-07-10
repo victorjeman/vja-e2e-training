@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 import { TESTIDS } from "@/shared/testids";
 import { PRODUCT_CONFIG } from "../product-config";
 import { productFormatPrice } from "../lib/product-format-price";
-import { productBadge, productCompareAtPrice } from "../lib/product-badges";
 import type { ProductCategory, ProductItem } from "../product-types";
 import { ProductRatingStars } from "./product-rating-stars";
 
@@ -22,30 +21,18 @@ interface ProductCardProps {
   onToggleFavorite: (productId: string) => void;
 }
 
-// Cosmetic pill badge classes per kind.
-const BADGE_STYLES: Record<string, string> = {
-  new: "bg-emerald-500 text-white",
-  trending: "bg-primary text-primary-foreground",
-  sale: "bg-rose-500 text-white",
-};
+// Original "compare at" price a discount is applied to (compareAt > price).
+function compareAtPrice(price: number, discountPercent: number): number {
+  return price / (1 - discountPercent / 100);
+}
 
 export function ProductCard({ product, category, isFavorite, onToggleFavorite }: ProductCardProps) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
 
-  const badge = productBadge(product.id);
-  const badgeLabel =
-    badge?.kind === "new"
-      ? PRODUCT_CONFIG.badges.new
-      : badge?.kind === "trending"
-        ? PRODUCT_CONFIG.badges.trending
-        : badge?.kind === "sale"
-          ? `-${badge.discountPercent}%`
-          : null;
-  const compareAtPrice =
-    badge?.kind === "sale" && badge.discountPercent
-      ? productCompareAtPrice(product.price, badge.discountPercent)
-      : null;
+  const outOfStock = product.inStock !== 1;
+  const hasDiscount = product.discountPercent > 0;
+  const wasPrice = hasDiscount ? compareAtPrice(product.price, product.discountPercent) : null;
 
   async function handleAddToCart() {
     setBusy(true);
@@ -73,21 +60,25 @@ export function ProductCard({ product, category, isFavorite, onToggleFavorite }:
           src={product.imageUrl}
           alt={product.name}
           loading="lazy"
-          className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className={cn(
+            "size-full object-cover transition-transform duration-300 group-hover:scale-105",
+            outOfStock && "opacity-60 grayscale"
+          )}
         />
         {/* Emoji fallback kept subtle behind the photo. */}
         <span className="pointer-events-none absolute inset-0 -z-10 flex items-center justify-center text-6xl opacity-40" aria-hidden>
           {product.image}
         </span>
 
-        {badgeLabel && (
-          <span
-            className={cn(
-              "absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm",
-              badge && BADGE_STYLES[badge.kind]
-            )}
-          >
-            {badgeLabel}
+        {hasDiscount && (
+          <span className="absolute left-3 top-3 rounded-full bg-rose-500 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
+            -{product.discountPercent}%
+          </span>
+        )}
+
+        {outOfStock && (
+          <span className="absolute left-3 bottom-3 rounded-full bg-foreground/85 px-2.5 py-1 text-xs font-semibold text-background shadow-sm">
+            {PRODUCT_CONFIG.text.outOfStock}
           </span>
         )}
 
@@ -110,18 +101,23 @@ export function ProductCard({ product, category, isFavorite, onToggleFavorite }:
       </Box>
 
       <CardContent className="space-y-2.5 p-4">
-        <Badge variant="muted" className="uppercase tracking-wide">
-          {category?.name ?? product.categoryId}
-        </Badge>
+        <Box className="flex items-center justify-between gap-2">
+          <Badge variant="muted" className="uppercase tracking-wide">
+            {category?.name ?? product.categoryId}
+          </Badge>
+          <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            {product.brand}
+          </span>
+        </Box>
         <h3 className="text-sm font-semibold leading-snug text-foreground">{product.name}</h3>
-        <ProductRatingStars productId={product.id} />
+        <ProductRatingStars rating={product.rating} reviewCount={product.reviewCount} />
         <Box className="flex items-baseline gap-2">
           <p className="text-xl font-bold tracking-tight text-foreground">
             {productFormatPrice(product.price)}
           </p>
-          {compareAtPrice && (
+          {wasPrice && (
             <p className="text-sm font-medium text-muted-foreground line-through">
-              {productFormatPrice(compareAtPrice)}
+              {productFormatPrice(wasPrice)}
             </p>
           )}
         </Box>
@@ -132,11 +128,11 @@ export function ProductCard({ product, category, isFavorite, onToggleFavorite }:
           data-testid={TESTIDS.addToCartBtn}
           data-product-id={product.id}
           onClick={handleAddToCart}
-          disabled={busy}
+          disabled={busy || outOfStock}
           className="w-full"
         >
           <ShoppingCart />
-          {PRODUCT_CONFIG.text.addToCart}
+          {outOfStock ? PRODUCT_CONFIG.text.outOfStock : PRODUCT_CONFIG.text.addToCart}
         </Button>
       </CardFooter>
     </Card>

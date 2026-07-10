@@ -1,17 +1,16 @@
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PRODUCT_CONFIG } from "../product-config";
-import { productRating } from "../lib/product-rating";
 
 interface ProductRatingStarsProps {
-  productId: string;
+  rating: number;
+  reviewCount: number;
   className?: string;
 }
 
-// Display-only star row + review count. Numbers come from a pure helper, never the DB.
-export function ProductRatingStars({ productId, className }: ProductRatingStarsProps) {
-  const { stars, reviewCount } = productRating(productId);
-  const filled = Math.round(stars);
+// Display-only star row + review count. Values come straight from the DB product row.
+export function ProductRatingStars({ rating, reviewCount, className }: ProductRatingStarsProps) {
+  const filled = Math.round(rating);
 
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
@@ -26,7 +25,7 @@ export function ProductRatingStars({ productId, className }: ProductRatingStarsP
           />
         ))}
       </div>
-      <span className="text-xs font-medium text-foreground">{stars.toFixed(1)}</span>
+      <span className="text-xs font-medium text-foreground">{rating.toFixed(1)}</span>
       <span className="text-xs text-muted-foreground">
         ({reviewCount} {PRODUCT_CONFIG.text.reviewsLabel})
       </span>

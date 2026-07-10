@@ -4,7 +4,12 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { ROUTES } from "@/shared/routes";
 import { getSessionUser } from "@backend/session";
-import { listCategories, listProducts } from "@backend/services/products-service";
+import {
+  listBrands,
+  listCategories,
+  listColors,
+  listProducts,
+} from "@backend/services/products-service";
 import { getFavoriteProductIds } from "@backend/services/favorites-service";
 import { PRODUCT_CONFIG } from "@/features/products/product-config";
 import { ProductList } from "@/features/products/ui/product-list";
@@ -16,6 +21,8 @@ export default async function ProductsPage() {
 
   const products = listProducts();
   const categories = listCategories();
+  const brands = listBrands();
+  const colors = listColors();
   const favoriteIds = getFavoriteProductIds(user.id);
 
   return (
@@ -24,7 +31,13 @@ export default async function ProductsPage() {
         <Heading level={1}>{PRODUCT_CONFIG.text.heading}</Heading>
         <Text className="text-base">{PRODUCT_CONFIG.text.subtitle}</Text>
       </Box>
-      <ProductList products={products} categories={categories} favoriteIds={favoriteIds} />
+      <ProductList
+        products={products}
+        categories={categories}
+        brands={brands}
+        colors={colors}
+        favoriteIds={favoriteIds}
+      />
     </Box>
   );
 }
