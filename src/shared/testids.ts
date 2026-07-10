@@ -60,6 +60,13 @@ export const TESTIDS = {
   checkoutBtn: "checkout-btn",
   orderSuccessMessage: "order-success-message",
   cartError: "cart-error",
+  // Orders
+  ordersLink: "orders-link",
+  ordersPage: "orders-page",
+  ordersList: "orders-list",
+  orderCard: "order-card",
+  orderTotal: "order-total",
+  ordersEmpty: "orders-empty",
 } as const;
 
 export type TestId = (typeof TESTIDS)[keyof typeof TESTIDS];

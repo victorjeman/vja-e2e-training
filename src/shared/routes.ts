@@ -6,6 +6,7 @@ export const ROUTES = {
   products: "/products",
   favorites: "/favorites",
   cart: "/cart",
+  orders: "/orders",
 } as const;
 
 export const API = {
