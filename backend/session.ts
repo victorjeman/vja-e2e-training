@@ -44,6 +44,12 @@ export async function getSessionUserId(): Promise<string | null> {
   const userId = raw.slice(0, idx);
   const signature = raw.slice(idx + 1);
   if (!verify(userId, signature)) return null;
+  // Confirm the user still exists. Seeds re-mint user ids between runs, so a cookie
+  // from a prior seed can carry a valid signature over a since-deleted userId. Treating
+  // that as logged-out (rather than trusting it) prevents foreign-key 500s on later
+  // cart/favorite/order writes and keeps guards redirecting cleanly to /login.
+  const exists = db.select({ id: users.id }).from(users).where(eq(users.id, userId)).get();
+  if (!exists) return null;
   return userId;
 }
 
