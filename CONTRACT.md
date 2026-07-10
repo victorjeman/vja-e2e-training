@@ -23,7 +23,6 @@ Deviations require a one-line code comment naming what and why.
 dev        next dev
 build      next build
 start      next start
-lint       next lint
 type-check tsc --noEmit
 db:push    drizzle-kit push
 db:reset   tsx backend/db/reset.ts        # drop+recreate all tables, then base catalog
