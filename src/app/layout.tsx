@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ShoppingBag, ShoppingCart } from "lucide-react";
+import { Heart, ShoppingBag, ShoppingCart } from "lucide-react";
 import "./globals.css";
 import { TESTIDS } from "@/shared/testids";
 import { ROUTES } from "@/shared/routes";
@@ -40,6 +40,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               >
                 Products
               </Link>
+
+              {/* Favorites nav link, logged-in only, next to Products. */}
+              {userId && (
+                <Link
+                  href={ROUTES.favorites}
+                  data-testid={TESTIDS.favoritesLink}
+                  className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  <Heart className="size-4" />
+                  <span className="hidden sm:inline">Favorites</span>
+                </Link>
+              )}
 
               <Link
                 href={ROUTES.cart}
