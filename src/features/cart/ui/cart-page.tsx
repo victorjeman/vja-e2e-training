@@ -88,11 +88,11 @@ export function CartPage({ cart: initialCart }: CartPageProps) {
         </Card>
       )}
 
-      {/* Deviation: contract has no cart-error testid; using data-testid="cart-error" so empty-checkout error is locatable. Reported to orchestrator. */}
+      {/* Empty-checkout error, locatable via TESTIDS.cartError. */}
       {error && (
         <Card className="flex-row items-center gap-3 border-destructive/40 bg-destructive/10 p-4">
           <AlertCircle className="size-5 shrink-0 text-destructive" />
-          <Text data-testid="cart-error" className="font-medium text-destructive">
+          <Text data-testid={TESTIDS.cartError} className="font-medium text-destructive">
             {error}
           </Text>
         </Card>
