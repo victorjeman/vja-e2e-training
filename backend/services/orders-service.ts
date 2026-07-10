@@ -22,28 +22,33 @@ export function checkout(userId: string): CheckoutResult {
   if (cart.items.length === 0) return { error: "cart_empty" };
 
   const orderId = randomUUID();
-  db.insert(orders)
-    .values({
-      id: orderId,
-      userId,
-      total: cart.total,
-      status: "confirmed",
-      createdAt: new Date().toISOString(),
-    })
-    .run();
-
-  for (const line of cart.items) {
-    db.insert(orderItems)
+  // All three writes (order + its items + clearing the cart) must succeed or none
+  // should: wrap them in a single transaction so a failure can't leave a confirmed
+  // order with partial items and an un-cleared cart.
+  db.transaction((tx) => {
+    tx.insert(orders)
       .values({
-        id: randomUUID(),
-        orderId,
-        productId: line.product.id,
-        qty: line.qty,
-        price: line.product.price,
+        id: orderId,
+        userId,
+        total: cart.total,
+        status: "confirmed",
+        createdAt: new Date().toISOString(),
       })
       .run();
-  }
 
-  db.delete(cartItems).where(eq(cartItems.userId, userId)).run();
+    for (const line of cart.items) {
+      tx.insert(orderItems)
+        .values({
+          id: randomUUID(),
+          orderId,
+          productId: line.product.id,
+          qty: line.qty,
+          price: line.product.price,
+        })
+        .run();
+    }
+
+    tx.delete(cartItems).where(eq(cartItems.userId, userId)).run();
+  });
   return { orderId };
 }
