@@ -11,3 +11,4 @@ test-results/
 
 tsconfig.tsbuildinfo
 *.tsbuildinfo
+e2e/tests/_verify.spec.ts
