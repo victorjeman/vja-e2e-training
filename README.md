@@ -101,6 +101,17 @@ and carry a `data-*` attribute so you can target a specific one (for example
 | Favorites empty message | `favorites-empty` |
 | Favorite toggle (shared with product cards) | `favorite-btn` |
 
+### Orders
+
+| Feature | `data-testid` |
+|---|---|
+| Orders link (header) | `orders-link` |
+| Orders page container | `orders-page` |
+| Orders list | `orders-list` |
+| Order card (per order; carries `data-order-id`) | `order-card` |
+| Order total (per card) | `order-total` |
+| Orders empty message | `orders-empty` |
+
 ### Pagination
 
 | Feature | `data-testid` |
@@ -225,6 +236,7 @@ Full details in `SEED-MAP.md`. Short list:
 - `user-cart-has-items` — demo user; cart holds `p-elec-2` and `p-book-1`.
 - `user-no-favorites` — demo user; catalog; favorites empty.
 - `user-has-favorites` — demo user; `p-elec-1` already favorited.
+- `user-with-orders` — demo user; one confirmed order of `p-elec-2` + `p-book-1`; empty cart, no favorites.
 - `catalog-default` — demo user; full catalog; clean filter state.
 - `catalog-search-match` — catalog guaranteed to contain the search-test product.
 - `catalog-no-match` — catalog for the search-yields-nothing / no-results test.

@@ -37,6 +37,7 @@ its seed in `beforeEach`, so tests are deterministic and independent.
 | `tests/products/sort.spec.ts` | `catalog-default` | sort-select, results-count |
 | `tests/products/pagination.spec.ts` | `catalog-default` | pagination, pagination-prev, pagination-next, pagination-page (+data-page), page-info |
 | `tests/favorites/favorites.spec.ts` | `user-no-favorites` (empty + toggle), `user-has-favorites` (viewing) | favorites-link, favorites-page, favorites-list, favorites-empty, favorite-btn (+data-active) |
+| `tests/orders/order-history.spec.ts` | `user-with-orders` | orders-link, orders-page, orders-list, order-card (+data-order-id), order-total, orders-empty |
 
 ## Seeds (CONTRACT §6) — what each guarantees
 
@@ -53,6 +54,7 @@ then sets exactly its state.
 | `user-cart-has-items` | e2e user; cart holds the 2 known products; favorites empty |
 | `user-no-favorites` | e2e user; catalog; favorites empty |
 | `user-has-favorites` | e2e user; catalog; 1 known product already favorited |
+| `user-with-orders` | e2e user; catalog; 1 confirmed order of `p-elec-2` + `p-book-1` (qty 1 each, catalog price); cart empty; favorites empty |
 | `catalog-default` | e2e user; full catalog; clean filter state |
 | `catalog-search-match` | e2e user; catalog guaranteed to contain the search-test product |
 | `catalog-no-match` | e2e user; catalog (for search-yields-nothing / no-results) |
